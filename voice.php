@@ -1,31 +1,36 @@
 <?php
-/*	°Ù¶ÈÓïÒôºÏ³Éapi½Ó¿Ú
-	Í¨¹ýURL£¬Ö±½Ó°ÑÎÄ×Ö±äÓïÒôÊä³ö
-	¸ü¶àÇë²Î¿´readme.md
+/*	ç™¾åº¦è¯­éŸ³åˆæˆapiæŽ¥å£
+	é€šè¿‡URLï¼Œç›´æŽ¥æŠŠæ–‡å­—å˜è¯­éŸ³è¾“å‡º
+	æ›´å¤šè¯·å‚çœ‹readme.md
 	gethub https://github.com/qcomdd/hi-voice	
-	µ÷ÓÃ·½Ê½./voice.php?t=ÒªºÏ³ÉÓïÒôµÄÎÄ×Ö 
+	è°ƒç”¨æ–¹å¼./voice.php?t=è¦åˆæˆè¯­éŸ³çš„æ–‡å­— 
+	ç™¾åº¦tokenæœ‰æ•ˆæœŸ30å¤©ï¼Œç¼“å­˜åœ¨æ–‡æœ¬æ–‡ä»¶ï¼ˆå¯¹ç›®å½•æœ‰å†™è¦æ±‚ï¼‰15å¤©ä¸€æ›´æ¢
 	by it0512
+	2017-6è¡¥å……
+	ä¿®æ”¹äº†ä¸€äº›ä¸åˆç†é€»è¾‘åˆ¤æ–­ï¼Œ
+	ç™¾åº¦è¯­éŸ³æ¯å¤©1Wæ¬¡ï¼Œå¦‚æžœä¸å¤Ÿç”¨è¯·å‡çº§æˆ–æ˜¯å¤šæ³¨å†Œå‡ ä¸ªkeyè½®è¯¢ã€‚è¿™ä¸ªåŠŸèƒ½æˆ‘å°±ä¸åŠ äº†ã€‚
+	
 */
 error_reporting(E_ALL ^ E_NOTICE);
 header("content-type:audio/mp3;charset=utf-8");
-//************»ù±¾¶¨Òå
+//************åŸºæœ¬å®šä¹‰
 define( 'DS' , DIRECTORY_SEPARATOR );
 define( 'AROOT' , dirname( __FILE__ ) . DS  );
-//************Âß¼­¹¦ÄÜ	
+//************é€»è¾‘åŠŸèƒ½	
 	$o = new OA2();
-	$text = isset($_GET['t'])?$_GET['t']:"ºÏ³ÉÓïÒô£¬ÇëÁªÏµit0512µã¶ùnet";
+	$text = !empty($_GET['t'])?$_GET['t']:"åˆæˆè¯­éŸ³ï¼Œè¯·è”ç³»it0512ç‚¹å„¿net";
 	$bb = $o->getVoice($text);
 	echo ($bb);
 
 /**************
- * °Ù¶ÈOA2ÈÏÖ¤
- * ÓÐ´æµ½±¾µØ³¬¹ý15Ìì£¬ÖØÈ¡
- * Ã¿´Îµ÷ÓÃtoken¶¼ÑéÖ¤Ê±¼ä 
+ * ç™¾åº¦OA2è®¤è¯
+ * æœ‰å­˜åˆ°æœ¬åœ°è¶…è¿‡15å¤©ï¼Œé‡å–
+ * æ¯æ¬¡è°ƒç”¨tokenéƒ½éªŒè¯æ—¶é—´ 
 ****************/
 class OA2
 {
-	private $appid= 'ÄãµÄappid',
-	$secret= 'ÄãµÄsecret',
+	private $appid= 'ä½ çš„appid',
+	$secret= 'ä½ çš„secret',
 	$Open_url = 'https://openapi.baidu.com/oauth/2.0/token?',
 	$url_voice = 'http://tsn.baidu.com/text2audio?',
 	$_logname='bd_log.txt',$_filename='bd_token.txt',
@@ -34,43 +39,43 @@ class OA2
 	function __construct(){
 		global $n,$t;
 	}
-	function getVoice($txt){//°Ù¶ÈÇëÇóÓïÒô
+	function getVoice($txt){//ç™¾åº¦è¯·æ±‚è¯­éŸ³
 		$params=array(
 		'tex' => $txt,
 		'tok' => $this->getToken(),
-		'spd' =>5,//ÓïËÙ£¬È¡Öµ 0-9£¬Ä¬ÈÏÎª 5 
-		'pit' =>5,//Òôµ÷£¬È¡Öµ 0-9£¬Ä¬ÈÏÎª 5 
-		'vol' =>9,//ÒôÁ¿£¬È¡Öµ 0-9£¬Ä¬ÈÏÎª 5
-		'per' =>1,//È¡Öµ 0-1 £»0 ÎªÅ®Éù£¬1 ÎªÄÐÉù£¬Ä¬ÈÏÎªÅ®Éù
+		'spd' =>5,//è¯­é€Ÿï¼Œå–å€¼ 0-9ï¼Œé»˜è®¤ä¸º 5 
+		'pit' =>5,//éŸ³è°ƒï¼Œå–å€¼ 0-9ï¼Œé»˜è®¤ä¸º 5 
+		'vol' =>9,//éŸ³é‡ï¼Œå–å€¼ 0-9ï¼Œé»˜è®¤ä¸º 5
+		'per' =>1,//å–å€¼ 0-1 ï¼›0 ä¸ºå¥³å£°ï¼Œ1 ä¸ºç”·å£°ï¼Œé»˜è®¤ä¸ºå¥³å£°
 		
 		'cuid' => 'it0512.net',
 		'ctp' =>1,
 		'lan'=>'zh');
 		$c = $this->file_get_content($this->url_voice,$params);	
-		if(!$c)$this->put('Oauth2·þÎñÆ÷Á¬½ÓÊ§°Ü');
+		if(!$c)$this->put('Oauth2æœåŠ¡å™¨è¿žæŽ¥å¤±è´¥');
 		return $c;
 	}
-	function _getToken(){//°Ù¶ÈÖ±½Ó·µ»ØAccessToken
+	function _getToken(){//ç™¾åº¦ç›´æŽ¥è¿”å›žAccessToken
 		$params=array(
 		'client_id' => $this->appid,
 		'client_secret' =>$this->secret,		
 		'grant_type'=>'client_credentials');
 		$c = $this->file_get_content($this->Open_url,$params);	
-		if(!$c)$this->put('Oauth2·þÎñÆ÷Á¬½ÓÊ§°Ü');
+		if(!$c)$this->put('Oauth2æœåŠ¡å™¨è¿žæŽ¥å¤±è´¥');
 		return $c;
 	}
-	function getToken(){		//Ð´ÈÕÖ¾
+	function getToken(){		//å†™æ—¥å¿—
 		$filename = AROOT.($this->_filename);
 		$file = fopen($filename, 'a+') or die("Unable to open file!");
 		$str = fread($file,1024);
 		$arr = json_decode($str,true);
-		if(!$arr && time()<intval($arr['_time']))
-		{//´óÓÚ15ÌìÁË
+		if(!$arr || isset($arr['_time']) || time()>intval($arr['_time']))
+		{
 			$str=$this->_getToken();
 			$arr=(array)json_decode($str,true);
 			$arr['_time']=time()+intval($arr['expires_in'])/2;
 			
-			$string = json_encode($arr);//Ö§³ÖÊý×éºÍ¶ÔÏó;
+			$string = json_encode($arr);//æ”¯æŒæ•°ç»„å’Œå¯¹è±¡;
 			fclose($file);
 			$file = fopen($filename, 'w+');
 			fwrite( $file,$string);
@@ -82,13 +87,13 @@ class OA2
 		return $this->access_token;
 	}
 	/*********************************/
-	function put($par){//Êä³öÌáÊ¾
-		exit($par."ÇëÁªÏµ¹ÜÀíÔ±£¬Ð»Ð»");
+	function put($par){//è¾“å‡ºæç¤º
+		exit($par."è¯·è”ç³»ç®¡ç†å‘˜ï¼Œè°¢è°¢");
 	}
-	function _log($data){		//Ð´ÈÕÖ¾
+	function _log($data){		//å†™æ—¥å¿—
 		if($this->is_log)
 		{
-			$string = var_export($data, TRUE);//²»¼ÓtrueºÍVAR_DUMPÒ»Ñù
+			$string = var_export($data, TRUE);//ä¸åŠ trueå’ŒVAR_DUMPä¸€æ ·
 			$file = fopen($this->_logname, 'a+'); 
 			fwrite( $file,$string."\r\n");
 			fclose($file); unset($file);
