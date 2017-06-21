@@ -69,7 +69,7 @@ class OA2
 		$file = fopen($filename, 'a+') or die("Unable to open file!");
 		$str = fread($file,1024);
 		$arr = json_decode($str,true);
-		if(!$arr || isset($arr['_time']) || time()>intval($arr['_time']))
+		if(!$arr || !isset($arr['_time']) || time()>intval($arr['_time']))
 		{
 			$str=$this->_getToken();
 			$arr=(array)json_decode($str,true);
